@@ -1,0 +1,31 @@
+{
+  "name": "tracker",
+  "version": "1.0.0",
+  "description": "middleware for the tracker app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Civilis317/tracker.git"
+  },
+  "keywords": [
+    "tracking",
+    "rest"
+  ],
+  "author": "Lie Zeilstra",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Civilis317/tracker/issues"
+  },
+  "homepage": "https://github.com/Civilis317/tracker#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.1",
+    "jsonwebtoken": "^8.0.1",
+    "mongoose": "^4.12.0",
+    "read-yaml": "^1.1.0"
+  }
+}
