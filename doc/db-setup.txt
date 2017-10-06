@@ -1,0 +1,20 @@
+Db setup:
+
+start mongodb --auth
+mongo
+use admin
+db.auth("root-admin", "P0mp311")
+
+db.createUser({user:"tracker-user", pwd:"welcome1",roles:[{ role: "readWrite", db: "tracker" },{role: "dbAdmin", db: "tracker"}]})
+
+logout
+mongo
+use admin
+db.auth("tracker-user", "welcome1")
+
+use tracker
+document = { Name : "Test" }
+db.testData.insert(document);
+
+show dbs
+show collections
