@@ -6,6 +6,8 @@ var routesApiv2 = require('./routes/routesApiV2');
 
 var app = express();
 
+app.set('port', (process.env.PORT || 5000));
+
 app.use('/api/v1', routesApiv1);
 app.use('/api/v2', routesApiv2);
 
@@ -13,8 +15,7 @@ app.get('/', function(request, response) {
 	response.json({'tracker-server status': 'up'})
 });
 
-app.listen(5000);
-
-console.log('server started: http://localhost:5000');
-
+app.listen(app.get('port'), function() {
+	console.log('TrackerTracer Server started and listening at port: ' + app.get('port'));
+});
 
