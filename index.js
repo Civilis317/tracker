@@ -1,8 +1,8 @@
 // imports - npm
 var express = require('express');
 
-var routesApiv1 = require('./routes/routesApiv1');
-var routesApiv2 = require('./routes/routesApiv2');
+var routesApiv1 = require('./routes/routesApiV1');
+var routesApiv2 = require('./routes/routesApiV2');
 
 var app = express();
 

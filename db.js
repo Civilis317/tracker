@@ -10,7 +10,7 @@ app.set('config', (process.env.CONFIG_PATH || 'application.yml'));
 var config = readYaml.sync(app.get('config'));
 
 // Build connection string and authentication
-var dbURI = `mongodb://${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.db}?authSource=admin`;
+var dbURI = `mongodb://${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.db}`;
 dbAuth = {
 		useMongoClient: false,
 		user: config.mongodb.username,
@@ -18,7 +18,7 @@ dbAuth = {
 }
   
 // Create the database connection 
-var db = mongoose.connect(dbURI, dbAuth); 
+var db = mongoose.connect(dbURI); 
 
 // When successfully connected
 mongoose.connection.on('connected', function () {  
