@@ -1,0 +1,50 @@
+version: "2"
+services:
+  
+  mongo_data:
+    image: 192.168.56.10:6010//tracker/mongo-data-image:latest
+    container_name: tracker-mongodb-data-dev
+  
+  mongodb:
+    image: 192.168.56.10:6010/books-express/mongo-image:latest
+    container_name: tracker-mongodb-dev
+  # only for debug
+    ports:
+      - "8080:8070"
+    volumes_from: 
+       - kvs_data
+    environment:
+      KVS_NOSSL: "true"
+      kvs.dropdir: "/kvs_data"
+      max.validation.request.size: 31457280
+      JAVA_OPTS: "-Dnossl=true"
+
+
+
+version: "2"
+services:
+
+  mongodb:
+    image: 192.168.56.10:6010/books-express/mongo-image:latest
+    container_name: mongo-dev
+    ports:
+      - "27017:27017"
+    volumes:
+      - /system/Lib/mongodb/data:/data/db
+
+  webapp:
+    image: 192.168.56.10:6010/books-express/nodejs-server:latest
+    container_name: boeken-express-dev
+    depends_on:
+      - mongodb
+    expose:
+      - "3000"
+    volumes:
+      - ./application.yml:/usr/src/app/application.yml
+    environment:
+      PORT: "3000"
+      
+networks:
+  default:
+    external:
+      name: books-express-network
