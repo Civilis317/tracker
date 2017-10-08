@@ -3,7 +3,19 @@
 var db = require('../db');
 
 var Location = db.model('Location', {
+	phoneid : {
+		type : String,
+		required : true
+	},
+	model : {
+		type : String,
+		required : true
+	},
 	name : {
+		type : String,
+		required : true
+	},
+	provider : {
 		type : String,
 		required : true
 	},
@@ -12,6 +24,18 @@ var Location = db.model('Location', {
 		required : true
 	},
 	lat : {
+		type : String,
+		required : true
+	},
+	ele : {
+		type : String,
+		required : true
+	},
+	heading : {
+		type : String,
+		required : true
+	},
+	speed : {
 		type : String,
 		required : true
 	},
