@@ -3,6 +3,8 @@
 var Location = require('../models/location-model');
 var ObjectId = require('mongodb').ObjectID;
 
+var allowedPhoneIds = ["2206e9a44381684d", "c728f74f120a101f"]
+
 // find one document by id
 module.exports.find = function(request, response) {
 	Location.findOne({ "_id" : ObjectId(request.params.id)}, function(err, location) {
@@ -29,16 +31,23 @@ module.exports.findAll = function(request, response) {
 module.exports.upsert = function(request, response) {
 	var location = new Location(request.body);
 	
-	Location.findOneAndUpdate (
-	  { "_id": location._id },       //your condition for check
-	  { $set: location },       //new values you want to set
-	  { upsert: true, 'new': true }).exec(function (err, data){
-			if (err) {
-				console.error(err);
-				return next(err);
-			}
-			response.status(201).json(data);
-	  });
+	if (allowedPhoneIds.indexOf(location.phoneid) > -1) {
+		Location.findOneAndUpdate (
+				  { "_id": location._id },       //your condition for check
+				  { $set: location },       //new values you want to set
+				  { upsert: true, 'new': true }).exec(function (err, data){
+						if (err) {
+							console.error(err);
+							return next(err);
+						}
+						response.status(201).json(data);
+				  });
+		
+	} else {
+		console.log("forbidden phoneid")
+		response.status(405).send("not allowed");
+	}
+	
 }
 
 // remove document
