@@ -1,10 +1,12 @@
 // imports - npm
 var express = require('express');
+var cors = require('cors')
 
 var routesApiv1 = require('./routes/routesApiV1');
 var routesApiv2 = require('./routes/routesApiV2');
 
 var app = express();
+app.use(cors());
 
 app.set('port', (process.env.PORT || 5000));
 
