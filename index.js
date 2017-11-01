@@ -2,6 +2,10 @@
 var express = require('express');
 var cors = require('cors')
 
+// config
+var config = require('./config').Config;
+
+// routes
 var routesApiv1 = require('./routes/routesApiV1');
 var routesApiv2 = require('./routes/routesApiV2');
 
@@ -14,7 +18,7 @@ app.use('/api/v1', routesApiv1);
 app.use('/api/v2', routesApiv2);
 
 app.get('/', function(request, response) {
-	response.json({'tracker-server status': 'up'})
+	response.json({'tracker-server status': 'up', 'version': config.version()})
 });
 
 app.listen(app.get('port'), function() {
