@@ -7,6 +7,7 @@ var jwt = require('jsonwebtoken');
 
 var authenticateController = require('../controllers/authenticate-controller');
 var locationController = require('../controllers/location-controller');
+var administrationController = require('../controllers/administration-controller');
 
 var secureRoutes = express.Router();
 secureRoutes.use(bodyParser.json());
@@ -18,6 +19,7 @@ secureRoutes.use(cookieParser());
 //validation middleware:
 secureRoutes.use(authenticateController.verifyToken);
 
+secureRoutes.post('/admin/user', administrationController.upsertUser);
 
 secureRoutes.get('/location/find/:id', locationController.find);
 secureRoutes.get('/location/list', locationController.findAll);
