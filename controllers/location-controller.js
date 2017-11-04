@@ -18,6 +18,7 @@ module.exports.find = function(request, response) {
 
 // return all Location documents
 module.exports.findAll = function(request, response) {
+	console.log('list');
 	Location.find(function(err, locationList) {
 		if (err) {
 			console.log(err)
