@@ -5,9 +5,8 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser')
 var jwt = require('jsonwebtoken');
 
-var authenticateController = require('../controllers/authenticate-controller');
+var authenticationController = require('../controllers/authentication-controller');
 var locationController = require('../controllers/location-controller');
-var administrationController = require('../controllers/administration-controller');
 
 var secureRoutes = express.Router();
 secureRoutes.use(bodyParser.json());
@@ -16,10 +15,16 @@ secureRoutes.use(bodyParser.urlencoded({
 }));
 secureRoutes.use(cookieParser());
 
-//validation middleware:
-secureRoutes.use(authenticateController.verifyToken);
+// this must appear before the middleware validation call to verifyToken...
+secureRoutes.post('/auth/login', authenticationController.authenticate);
 
-secureRoutes.post('/admin/user', administrationController.upsertUser);
+//validation middleware:
+secureRoutes.use(authenticationController.verifyToken);
+secureRoutes.get('/auth/logout', authenticationController.logout);
+
+secureRoutes.post('/admin/user/save', authenticationController.upsertUser);
+
+
 
 secureRoutes.get('/location/find/:id', locationController.find);
 secureRoutes.get('/location/list', locationController.findAll);

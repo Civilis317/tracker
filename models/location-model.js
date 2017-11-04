@@ -3,6 +3,7 @@
 var db = require('../db');
 
 var Location = db.model('Location', {
+	username : {type: String, required: true},
 	phoneid : {
 		type : String,
 		required : true

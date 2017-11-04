@@ -3,6 +3,8 @@
 var Location = require('../models/location-model');
 var ObjectId = require('mongodb').ObjectID;
 
+// temporary safety measure to prevent anonymous posting to the now public endpoint
+// mus be replaced by checking if phoneid exists in db, connected to an active user...
 var allowedPhoneIds = ["2206e9a44381684d", "c728f74f120a101f", "3fb36a7906f91cf3"]
 
 // find one document by id
