@@ -3,7 +3,7 @@
 var Location = require('../models/location-model');
 var ObjectId = require('mongodb').ObjectID;
 
-var allowedPhoneIds = ["2206e9a44381684d", "c728f74f120a101f"]
+var allowedPhoneIds = ["2206e9a44381684d", "c728f74f120a101f", "3fb36a7906f91cf3"]
 
 // find one document by id
 module.exports.find = function(request, response) {
