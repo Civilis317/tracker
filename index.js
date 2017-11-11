@@ -10,7 +10,14 @@ var routesApiv1 = require('./routes/routesApiV1');
 var routesApiv2 = require('./routes/routesApiV2');
 
 var app = express();
-app.use(cors());
+
+var corsSettings = {
+		  origin: true,
+		  methods: ['GET','POST'],
+		  credentials: true
+		};
+
+app.use(cors(corsSettings));
 
 app.set('port', (process.env.PORT || 5000));
 
