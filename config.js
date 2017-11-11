@@ -23,6 +23,11 @@ Config.prototype.secretKey = function() {
 	return config.application.key;
 };
 
+Config.prototype.secureCookie = function() {
+	refresh();
+	return config.application.secureCookie;
+};
+
 Config.prototype.mongodbUri = function() {
 	refresh();
 	return `mongodb://${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.db}`;

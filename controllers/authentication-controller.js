@@ -45,19 +45,16 @@ module.exports.authenticate = function (request, response) {
 			var user = data[0];
 			var pwdhash = crypto.createHash('md5').update(password).digest("hex");
 			
-			if (pwdhash === user.password) {
+			if (user.active && pwdhash === user.password) {
 				var token = jwt.sign(user.toObject(), config.secretKey() , {expiresIn: 4000});
-
-				// add token to cookie httpOnly = not accessible by browser-javascript, secure=cookie will only be sent over https
-				response.cookie('token',token,{ httpOnly: true, maxAge: 10000 });
-//				response.cookie('x-test-5','httpOnly and secure',{ httpOnly: true, secure: true });
-				
-				response.json({success: true});
+				response.cookie('token',token,{ httpOnly: true, secure: config.secureCookie(), maxAge: 10000 });
+				user.password = null;
+				response.json({authenticated: true, user: user});
 			} else {
-				response.status(403).send("authentication failed");
+				response.status(403).json({authenticated: false});
 			}
 		} else {
-			response.status(403).send("authentication failed");
+			response.status(403).json({authenticated: false});
 		}
 	});
 }
