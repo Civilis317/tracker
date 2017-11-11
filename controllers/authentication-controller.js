@@ -12,6 +12,8 @@ module.exports.logout = function(request, response) {
 }
 
 module.exports.verifyToken = function(request, response, next) {
+	console.log('all cookies: ' + request.cookies)
+	
 	var token = request.cookies['token'];
 	console.log('token: ' + token)
 
@@ -24,7 +26,7 @@ module.exports.verifyToken = function(request, response, next) {
 				response.status(500).send("Invalid Token");
 			} else {
 				// refersh cookie
-				response.cookie('token',token,{ httpOnly: true, maxAge: 10000 });
+				response.cookie('token',token,{ httpOnly: true, maxAge: 30 * 60 * 1000 });
 				console.log("token verified")
 				next();
 			}
@@ -47,7 +49,7 @@ module.exports.authenticate = function (request, response) {
 			
 			if (user.active && pwdhash === user.password) {
 				var token = jwt.sign(user.toObject(), config.secretKey() , {expiresIn: 4000});
-				response.cookie('token',token,{ httpOnly: true, secure: config.secureCookie(), maxAge: 10000 });
+				response.cookie('token',token,{ httpOnly: true, secure: config.secureCookie(), maxAge: 30 * 60 * 1000 });
 				user.password = null;
 				response.json({authenticated: true, user: user});
 			} else {
