@@ -7,7 +7,7 @@ var ObjectId = require('mongodb').ObjectID;
 // mus be replaced by checking if phoneid exists in db, connected to an active user...
 var allowedPhoneIds = ["2206e9a44381684d", "c728f74f120a101f", "3fb36a7906f91cf3"]
 
-// find one document by id
+//find one document by id
 module.exports.find = function(request, response) {
 	Location.findOne({ "_id" : ObjectId(request.params.id)}, function(err, location) {
 		if (err) {
@@ -16,6 +16,26 @@ module.exports.find = function(request, response) {
 		}
 		response.json(location)
 	});
+}
+
+// find list of documents by phoneid
+module.exports.findByPhoneId = function(request, response) {
+	Location.find({ "phoneid" : request.query.phoneid}).sort({'date': -1}).limit(100).exec(function(err, locationList) {
+		if (err) {
+			console.log(err)
+			return next(err);
+		}
+		response.json(locationList)		
+	});
+	/*
+	Location.find({ "phoneid" : request.query.phoneid}, function(err, locationList) {
+		if (err) {
+			console.log(err)
+			return next(err);
+		}
+		response.json(locationList)
+	}).sort('-date');
+	*/
 }
 
 // return all Location documents

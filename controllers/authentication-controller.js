@@ -53,10 +53,12 @@ module.exports.authenticate = function (request, response) {
 				user.password = null;
 				response.json({authenticated: true, user: user});
 			} else {
-				response.status(403).json({authenticated: false});
+				console.log('user found, wrong password')
+				response.json({authenticated: false});
 			}
 		} else {
-			response.status(403).json({authenticated: false});
+			console.log('wrong username')
+			response.json({authenticated: false});
 		}
 	});
 }
