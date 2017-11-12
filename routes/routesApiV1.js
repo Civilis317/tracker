@@ -2,23 +2,33 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var router = express.Router();
+var cookieParser = require('cookie-parser')
+var jwt = require('jsonwebtoken');
 
+var authenticationController = require('../controllers/authentication-controller');
 var locationController = require('../controllers/location-controller');
 
-router.use(bodyParser.json());
+var secureRoutes = express.Router();
+secureRoutes.use(bodyParser.json());
+secureRoutes.use(bodyParser.urlencoded({
+	extended : true
+}));
+secureRoutes.use(cookieParser());
 
-router.get('/location/find/:id', locationController.find);
-router.get('/location/list', locationController.findAll);
-router.put('/location/update', locationController.upsert)
-router.post('/location/save', locationController.upsert)
-router.delete('/location/remove/:id', locationController.remove)
+// this must appear before the middleware validation call to verifyToken...
+secureRoutes.post('/auth/login', authenticationController.authenticate);
 
-router.post('/receive', function(request, response) {
-//	console.log(request.body);
-	var homepage = request.body.homepage;
-	console.log(homepage);
-	response.json({'v1.author': request.body.author});
-});
+//validation middleware:
+secureRoutes.use(authenticationController.verifyToken);
+secureRoutes.get('/auth/logout', authenticationController.logout);
 
-module.exports = router;
+secureRoutes.post('/admin/user/save', authenticationController.upsertUser);
+
+secureRoutes.get('/location/find/:id', locationController.find);
+// secureRoutes.get('/location/list', locationController.findAll);
+secureRoutes.get('/location/list', locationController.findByPhoneId);
+secureRoutes.put('/location/update', locationController.upsert)
+secureRoutes.post('/location/save', locationController.upsert)
+secureRoutes.delete('/location/remove/:id', locationController.remove)
+
+module.exports = secureRoutes;
