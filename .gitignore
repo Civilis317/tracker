@@ -43,3 +43,7 @@ yarn-error.log
 Thumbs.db
 
 /.tern-project
+
+doc/import_users.sh
+doc/users.json
+tracker.iml

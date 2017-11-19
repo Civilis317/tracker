@@ -12,13 +12,12 @@ module.exports.logout = function(request, response) {
 }
 
 module.exports.verifyToken = function(request, response, next) {
-	console.log('all cookies: ' + request.cookies)
+	//console.log('all cookies: ' + request.cookies)
 	
 	var token = request.cookies['token'];
-	console.log('token: ' + token)
 
 	if (!token) {
-		console.log(request.path)
+		console.log("403, Please provide token")
 		response.status(403).send("please provide a token");
 	} else {
 		jwt.verify(token, config.secretKey(), function(err, decode) {
@@ -37,7 +36,9 @@ module.exports.verifyToken = function(request, response, next) {
 module.exports.authenticate = function (request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
-	
+
+	console.log(`username: ${username}, password: ${password}`);
+
 	User.find({username: username}, function(err, data) {
 		if (err) {
 			return next(err);
@@ -51,6 +52,7 @@ module.exports.authenticate = function (request, response) {
 				var token = jwt.sign(user.toObject(), config.secretKey() , {expiresIn: 4000});
 				response.cookie('token',token,{ httpOnly: true, secure: config.secureCookie(), maxAge: 30 * 60 * 1000 });
 				user.password = null;
+				console.log('returning authenticated!')
 				response.json({authenticated: true, user: user});
 			} else {
 				console.log('user found, wrong password')
