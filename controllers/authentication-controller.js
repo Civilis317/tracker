@@ -65,22 +65,59 @@ module.exports.authenticate = function (request, response) {
 	});
 }
 
-
 module.exports.upsertUser = function(request, response, next) {
-	var user = new User(request.body);
-	if (user.password && user.password != null) {
-		var pwdhash = crypto.createHash('md5').update(user.password).digest("hex");
-		user.password = pwdhash;
-	}
-	
-	User.findOneAndUpdate (
-		{ "_id": user._id },
-		{ $set: user },
-		{ upsert: true, 'new': true }).exec(function (err, data){
-			if (err) {
-				console.error(err);
-				return next(err);
-			}
-			response.status(201).json(data);
-		});
+    var user = new User(request.body);
+
+    console.log('user: ' + user);
+    if (user.password && user.password != null) {
+        var pwdhash = crypto.createHash('md5').update(user.password).digest("hex");
+        user.password = pwdhash;
+    }
+
+    User.findOneAndUpdate (
+        { "_id": user._id },
+        { $set: user },
+        { upsert: true, 'new': true }).exec(function (err, data){
+        if (err) {
+            console.error(err);
+            return next(err);
+        }
+        response.status(201).json(data);
+    });
 }
+
+
+/*
+Update all user properties, but NOT password!
+ */
+module.exports.saveSettings = function(request, response, next) {
+    var user = new User(request.body);
+
+    User.find({username: user.username}, function(err, data) {
+        if (err) {
+            response.json({"error": "computer says no..."});
+        }
+
+        if (1 == data.length) {
+            var pwd = data[0];
+            var pwdhash = data[0].password;
+            user.password = pwdhash;
+
+            User.findOneAndUpdate (
+                { "_id": user._id },
+                { $set: user },
+                { upsert: true, 'new': true }).exec(function (err, data){
+                if (err) {
+                    console.error(err);
+                    return next(err);
+                }
+                response.status(201).json(data);
+            });
+
+
+        } else {
+            response.json({"error": "user not found"});
+        }
+    });}
+
+
