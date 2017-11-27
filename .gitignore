@@ -44,6 +44,6 @@ Thumbs.db
 
 /.tern-project
 
-doc/import_users.sh
-doc/users.json
+
+doc
 tracker.iml
