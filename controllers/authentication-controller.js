@@ -47,6 +47,8 @@ module.exports.authenticate = function (request, response) {
 		if (1 == data.length) {
 			var user = data[0];
 			var pwdhash = crypto.createHash('md5').update(password).digest("hex");
+			console.log('new pwdhash : ' + pwdhash);
+			console.log('user pwdhash: ' + user.password);
 			
 			if (user.active && pwdhash === user.password) {
 				var token = jwt.sign(user.toObject(), config.secretKey() , {expiresIn: 4000});
