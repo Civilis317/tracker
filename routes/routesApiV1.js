@@ -25,7 +25,6 @@ secureRoutes.get('/auth/logout', authenticationController.logout);
 secureRoutes.post('/admin/settings/save', authenticationController.saveSettings);
 
 secureRoutes.get('/location/find/:id', locationController.find);
-// secureRoutes.get('/location/list', locationController.findAll);
 secureRoutes.get('/location/list', locationController.findByPhoneId);
 secureRoutes.put('/location/update', locationController.upsert)
 secureRoutes.post('/location/save', locationController.upsert)

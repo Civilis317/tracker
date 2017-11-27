@@ -11,11 +11,11 @@ var dbURI = config.mongodbUri();
 var dbAuth = config.authentication();
 
 // Create the database connection 
-var db = mongoose.connect(dbURI, dbAuth); 
+var db = mongoose.connect(dbURI, dbAuth);
 
 // When successfully connected
 mongoose.connection.on('connected', function () {  
-  console.log('Mongoose default connection open to ' + dbURI);
+  console.log(`Mongoose default connection open to ${dbURI}`);
 }); 
 
 // If the connection throws an error
