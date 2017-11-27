@@ -1,10 +1,21 @@
 //config.js - configuration service
 
+// import lib from node-modules
+var readYaml = require('read-yaml');
+
+var configFile = 'application.yml';
+var config = readYaml.sync(configFile);
+
 var Config = function () {
 };
 
+refresh = function () {
+    config = readYaml.sync(configFile);
+}
+
 Config.prototype.version = function () {
-    return process.env.APP_VERSION;
+    refresh();
+    return config.application.version;
 };
 
 Config.prototype.secretKey = function () {
