@@ -17,7 +17,6 @@ module.exports.verifyToken = function(request, response, next) {
 	var token = request.cookies['token'];
 
 	if (!token) {
-		console.log("403, Please provide token")
 		response.status(403).send("please provide a token");
 	} else {
 		jwt.verify(token, config.secretKey(), function(err, decode) {
@@ -26,7 +25,6 @@ module.exports.verifyToken = function(request, response, next) {
 			} else {
 				// refersh cookie
 				response.cookie('token',token,{ httpOnly: true, maxAge: 30 * 60 * 1000 });
-				console.log("token verified")
 				next();
 			}
 		});
@@ -37,8 +35,6 @@ module.exports.authenticate = function (request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
 
-	console.log(`username: ${username}, password: ${password}`);
-
 	User.find({username: username}, function(err, data) {
 		if (err) {
 			return next(err);
@@ -47,21 +43,16 @@ module.exports.authenticate = function (request, response) {
 		if (1 == data.length) {
 			var user = data[0];
 			var pwdhash = crypto.createHash('md5').update(password).digest("hex");
-			console.log('new pwdhash : ' + pwdhash);
-			console.log('user pwdhash: ' + user.password);
-			
+
 			if (user.active && pwdhash === user.password) {
 				var token = jwt.sign(user.toObject(), config.secretKey() , {expiresIn: 4000});
 				response.cookie('token',token,{ httpOnly: true, secure: config.secureCookie(), maxAge: 30 * 60 * 1000 });
 				user.password = null;
-				console.log('returning authenticated!')
 				response.json({authenticated: true, user: user});
 			} else {
-				console.log('user found, wrong password')
 				response.json({authenticated: false});
 			}
 		} else {
-			console.log('wrong username')
 			response.json({authenticated: false});
 		}
 	});
@@ -70,7 +61,6 @@ module.exports.authenticate = function (request, response) {
 module.exports.upsertUser = function(request, response, next) {
     var user = new User(request.body);
 
-    console.log('user: ' + user);
     if (user.password && user.password != null) {
         var pwdhash = crypto.createHash('md5').update(user.password).digest("hex");
         user.password = pwdhash;
