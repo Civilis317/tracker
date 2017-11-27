@@ -1,49 +1,34 @@
-//config.js - configuration service that reads the application.yml
+//config.js - configuration service
 
-// import
-var readYaml = require('read-yaml');
+var Config = function () {
+};
 
-//Read config yml:
-var configFile = process.env.CONFIG_PATH || 'application.yml';
-var config = readYaml.sync(configFile);
+Config.prototype.version = function () {
+    return process.env.APP_VERSION;
+};
 
-var Config = function() {};
+Config.prototype.secretKey = function () {
+    return process.env.JWT_SECRET_KEY;
+};
 
-refresh = function() {
-	config = readYaml.sync(configFile);
+Config.prototype.secureCookie = function () {
+    return 'true' == process.env.SECURE_COOKIE;
+};
+
+Config.prototype.mongodbUri = function () {
+    return `mongodb://${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/${process.env.MONGODB_DB}`;
 }
 
-Config.prototype.version = function() {
-	refresh();
-	return config.application.version;
-};
-
-Config.prototype.secretKey = function() {
-	refresh();
-	return config.application.key;
-};
-
-Config.prototype.secureCookie = function() {
-	refresh();
-	return config.application.secureCookie;
-};
-
-Config.prototype.mongodbUri = function() {
-	refresh();
-	return `mongodb://${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.db}`;
-}
-
-Config.prototype.authentication = function() {
-	refresh();
-	var dbAuth = `{
-					"useMongoClient": false,
-					"user": "${config.mongodb.username}",
-					"pass": "${config.mongodb.password}",
-					"auth":{
-						"authdb": "${config.mongodb.authdb}"
-				    }
-	}`;
-	return JSON.parse(dbAuth);
+Config.prototype.authentication = function () {
+    var dbAuth = `{
+		"useMongoClient": false,
+		"user": "${process.env.MONGODB_USERNAME}",
+		"pass": "${process.env.MONGODB_PASSWORD}",
+		"auth":{
+			"authdb": "${process.env.MONGODB_AUTH_DB}"
+		}
+	  }`;
+    return JSON.parse(dbAuth);
 }
 
 exports.Config = new Config();
